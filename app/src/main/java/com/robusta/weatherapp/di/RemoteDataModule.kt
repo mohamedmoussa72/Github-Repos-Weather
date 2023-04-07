@@ -13,7 +13,6 @@ import javax.inject.Singleton
 @Module
 object RemoteDataModule {
 
-    @Singleton
     @Provides
     fun provideWeatherRemoteDataSource(
         apiService: ApiService

@@ -13,7 +13,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
 
-    @Singleton
     @Provides
     fun provideWeatherRepository(
         weatherRemoteDataSource: WeatherRemoteDataSource

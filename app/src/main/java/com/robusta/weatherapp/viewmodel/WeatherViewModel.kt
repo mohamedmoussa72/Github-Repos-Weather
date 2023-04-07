@@ -1,9 +1,12 @@
 package com.robusta.weatherapp.viewmodel
 
+import android.app.Activity
 import android.content.Context
+import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.robusta.data.model.WeatherResponse
 import com.robusta.data.utile.Resource
@@ -12,11 +15,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.Exception
 import androidx.lifecycle.*
+import com.robusta.data.model.location.LocationEntity
+import com.robusta.domain.usecase.GetLocationUseCase
 import com.robusta.weatherapp.R
+import dagger.hilt.android.lifecycle.HiltViewModel
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
-class WeatherViewModel @Inject constructor(private val getWeatherDataUseCase: GetWeatherDataUseCase):ViewModel() {
-    private val weatherData: MutableLiveData<Resource<WeatherResponse>> = MutableLiveData()
+@HiltViewModel
+class WeatherViewModel @Inject constructor(private val getWeatherDataUseCase: GetWeatherDataUseCase, private val getLocationUseCase: GetLocationUseCase):ViewModel() {
+     val weatherData: MutableLiveData<Resource<WeatherResponse>> = MutableLiveData()
+    private var compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     fun getWeatherData(context: Context,lat:Double , lon :Double) = viewModelScope.launch(Dispatchers.IO) {
             weatherData.postValue(Resource.Loading())
@@ -24,6 +34,7 @@ class WeatherViewModel @Inject constructor(private val getWeatherDataUseCase: Ge
             if(isNetworkAvailable(context)) {
 
                 val apiResult = getWeatherDataUseCase.execute(lat, lon)
+                Log.e("Tagffffff", apiResult.data?.name.toString())
                 weatherData.postValue(apiResult)
             }else{
                 weatherData.postValue(Resource.Error(context.getString(R.string.internet_error_msg)))
@@ -34,9 +45,6 @@ class WeatherViewModel @Inject constructor(private val getWeatherDataUseCase: Ge
         }
 
     }
-
-
-
     private fun isNetworkAvailable(context: Context?):Boolean{
         if (context == null) return false
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -64,6 +72,21 @@ class WeatherViewModel @Inject constructor(private val getWeatherDataUseCase: Ge
         return false
 
     }
+
+    private val _locationModel = MutableLiveData<LocationEntity>()
+    val locationModel: LiveData<LocationEntity> = _locationModel
+
+    fun getLocation() {
+        compositeDisposable.add(getLocationUseCase.execute()
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .subscribe {
+                Log.e("TagDAtalo", it.lat.toString())
+
+            })
+    }
+
+
 
 
 }
