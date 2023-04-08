@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import com.robusta.data.locale.WeatherDao
 import com.robusta.data.locale.WeatherDataBase
-import com.robusta.data.utile.ConstantDomain.WEATHER_DATABASE
+import com.robusta.data.utile.ConstantData.WEATHER_DATABASE
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

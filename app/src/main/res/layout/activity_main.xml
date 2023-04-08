@@ -7,7 +7,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        tools:context=".view.MainActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_activity_main_toolbar_info"

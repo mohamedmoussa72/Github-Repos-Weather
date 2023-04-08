@@ -1,4 +1,4 @@
-package com.robusta.data.repo
+package com.robusta.data.repo.location
 
 
 import com.robusta.data.model.location.LocationEntity

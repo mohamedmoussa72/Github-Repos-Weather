@@ -1,6 +1,6 @@
 package com.robusta.weatherapp.di
 
-import com.robusta.data.repo.LocationRepository
+import com.robusta.data.repo.location.LocationRepository
 import com.robusta.data.repo.WeatherRepository
 import com.robusta.domain.usecase.GetLocationUseCase
 import com.robusta.domain.usecase.GetSavedWeatherUseCase

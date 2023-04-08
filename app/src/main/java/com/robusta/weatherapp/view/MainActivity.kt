@@ -1,4 +1,4 @@
-package com.robusta.weatherapp
+package com.robusta.weatherapp.view
 
 import android.content.Intent
 import android.graphics.Bitmap
@@ -14,11 +14,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.robusta.data.model.WeatherResponse
 import com.robusta.data.model.location.WeatherData
 import com.robusta.data.utile.Resource
+import com.robusta.weatherapp.R
 import com.robusta.weatherapp.base.BaseActivity
 import com.robusta.weatherapp.databinding.ActivityMainBinding
 import com.robusta.weatherapp.databinding.DialogLocationDataDetailsBinding
 import com.robusta.weatherapp.utile.CompressionUtil
-import com.robusta.weatherapp.view.WeatherAdapter
 import com.robusta.weatherapp.viewmodel.LocationViewModel
 import com.robusta.weatherapp.viewmodel.WeatherViewModel
 import dagger.hilt.android.AndroidEntryPoint

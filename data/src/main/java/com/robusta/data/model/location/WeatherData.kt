@@ -3,7 +3,7 @@ package com.robusta.data.model.location
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-import com.robusta.data.utile.ConstantDomain.WEATHER_TABLE
+import com.robusta.data.utile.ConstantData.WEATHER_TABLE
 
 @Entity(tableName = WEATHER_TABLE )
 data class WeatherData(

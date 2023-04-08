@@ -1,48 +1,32 @@
-package com.robusta.data.repo
+package com.robusta.data.repo.location
 
 import android.Manifest
-import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
-import android.os.Build
 import android.os.Looper
-import android.util.Log
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import com.google.android.gms.location.*
-import com.google.android.gms.tasks.CancellationToken
-import com.google.android.gms.tasks.CancellationTokenSource
-import com.google.android.gms.tasks.OnTokenCanceledListener
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
 import com.robusta.data.model.location.LocationEntity
-import com.robusta.data.utile.LocationException
-import com.robusta.data.utile.Resource
 import com.robusta.data.utile.hasLocationPermission
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.BackpressureStrategy
 import io.reactivex.rxjava3.core.Flowable
-import io.reactivex.rxjava3.core.Scheduler
-import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.PublishSubject
 import javax.inject.Inject
 import javax.inject.Singleton
-private const val LOCATION_REQUEST_INTERVAL = 10000L
-private const val LOCATION_REQUEST_FASTEST_INTERVAL = 5000L
-private const val LOCATION_REQUEST_FASTEST_INTER = 5000
 
 @Singleton
-class GoogleLocationDataSource @Inject constructor(context: Context,locationRequest:LocationRequest) {
+class GoogleLocationDataSource @Inject constructor(context: Context, locationRequest: LocationRequest) {
 
     private val locationSubject = PublishSubject.create<LocationEntity>()
     private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 
     private val locationCallback: LocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
-            Log.e("Taglllsddds","gg")
-
             locationResult.locations.forEach(::setLocation)
         }
     }
@@ -54,9 +38,7 @@ class GoogleLocationDataSource @Inject constructor(context: Context,locationRequ
         .doOnCancel { stopLocationUpdates() }
 
 
-    private fun startLocationUpdates(context: Context,locationRequest: LocationRequest) {
-        Log.e("Taglll",context.toString())
-
+    private fun startLocationUpdates(context: Context, locationRequest: LocationRequest) {
 
         if (! context.hasLocationPermission()){
          return
@@ -95,13 +77,10 @@ class GoogleLocationDataSource @Inject constructor(context: Context,locationRequ
 
 
     private fun stopLocationUpdates() {
-        Log.e("Taglllss","gg")
-
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
     private fun setLocation(location: Location) {
-        Log.e("Taglll",location.latitude.toString())
         locationSubject.onNext(
             LocationEntity(
                 location.latitude,
