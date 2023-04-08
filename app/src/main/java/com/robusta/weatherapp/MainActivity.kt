@@ -16,7 +16,6 @@ import com.robusta.data.utile.Resource
 import com.robusta.weatherapp.base.BaseActivity
 import com.robusta.weatherapp.databinding.ActivityMainBinding
 import com.robusta.weatherapp.databinding.DialogLocationDataDetailsBinding
-import com.robusta.weatherapp.utile.CompressionUtil
 import com.robusta.weatherapp.view.WeatherAdapter
 import com.robusta.weatherapp.viewmodel.WeatherViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,15 +27,16 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
-    var compressedPath=""
-    val viewModel: WeatherViewModel by viewModels()
+    private var compressedPath = ""
+    private val viewModel: WeatherViewModel by viewModels()
     private var bottomLocationDataDialog: BottomSheetDialog? = null
+
     @Inject
     lateinit var adapter: WeatherAdapter
-    lateinit var binding: ActivityMainBinding
-    lateinit var bindingSheet: DialogLocationDataDetailsBinding
-    var lat: Double = 0.0
-    var lon: Double = 0.0
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var bindingSheet: DialogLocationDataDetailsBinding
+    private var lat: Double = 0.0
+    private var lon: Double = 0.0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -86,12 +86,18 @@ class MainActivity : BaseActivity() {
 
     private fun showBottomLocationDataDialog() {
         bottomLocationDataDialog = BottomSheetDialog(this)
-        bindingSheet = DataBindingUtil.inflate(layoutInflater, R.layout.dialog_location_data_details, null, false)
+        bindingSheet = DataBindingUtil.inflate(
+            layoutInflater,
+            R.layout.dialog_location_data_details,
+            null,
+            false
+        )
         bottomLocationDataDialog?.setContentView(bindingSheet.root)
         bindingSheet.pbDialogLocationDataProgressr.visibility = View.VISIBLE
         viewModel.getWeatherData(this@MainActivity, lat, lon)
         bindingSheet.apply {
             tvDialogLocationDataShare.setOnClickListener {
+
                 val intent = Intent(Intent.ACTION_SEND)
                 intent.type = "image/*"
                 intent.putExtra(Intent.EXTRA_STREAM, compressedPath.toUri())
@@ -120,25 +126,27 @@ class MainActivity : BaseActivity() {
 
 //             compressedPath = CompressionUtil().getBitmapFromView(this@MainActivity, clDialogLocationDataContainer)
 //            saveData(result,compressedPath)
-            Log.e("TagUri",compressedPath.toString())
+            Log.e("TagUri", compressedPath.toString())
         }
     }
 
 
-    private fun saveData(result: Resource<WeatherResponse>,image:String) {
+    private fun saveData(result: Resource<WeatherResponse>, image: String) {
         CoroutineScope(Dispatchers.IO).launch {
             result.data?.apply {
-                viewModel.saveArticle(WeatherData(
+                viewModel.saveArticle(
+                    WeatherData(
 
-                    name.toString(),
-                    main?.temp.toString(),
-                    weather?.get(0)?.main.toString(),
-                    main?.temp_min.toString(),
-                    main?.temp_max.toString(),
-                    wind?.speed.toString(),
-                    image
+                        name.toString(),
+                        main?.temp.toString(),
+                        weather?.get(0)?.main.toString(),
+                        main?.temp_min.toString(),
+                        main?.temp_max.toString(),
+                        wind?.speed.toString(),
+                        image
 
-                ))
+                    )
+                )
 
             }
 

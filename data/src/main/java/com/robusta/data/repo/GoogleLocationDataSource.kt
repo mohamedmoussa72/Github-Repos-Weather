@@ -48,7 +48,7 @@ class GoogleLocationDataSource @Inject constructor(context: Context,locationRequ
     }
 
     val locationObservable: Flowable<LocationEntity> = locationSubject.toFlowable(
-        BackpressureStrategy.MISSING
+        BackpressureStrategy.LATEST
     )
         .doOnSubscribe { startLocationUpdates(context,locationRequest) }
         .doOnCancel { stopLocationUpdates() }
@@ -86,7 +86,7 @@ class GoogleLocationDataSource @Inject constructor(context: Context,locationRequ
             // for ActivityCompat#requestPermissions for more details.
             return
         }
-        fusedLocationClient.lastLocation.addOnSuccessListener(::setLocation)
+//        fusedLocationClient.lastLocation.addOnSuccessListener(::setLocation)
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback,
             Looper.getMainLooper()
         )

@@ -32,7 +32,8 @@ class WeatherViewModel @Inject constructor(private val getWeatherDataUseCase: Ge
                                            ,private val saveWeatherUseCase: SaveWeatherUseCase
                                            ,private val getSavedWeatherUseCase: GetSavedWeatherUseCase):ViewModel() {
     val weatherData: MutableLiveData<Resource<WeatherResponse>> = MutableLiveData()
-    val locationData: MutableLiveData<Resource<LocationEntity>> = MutableLiveData()
+   private val _locationData: MutableLiveData<Resource<LocationEntity>> = MutableLiveData()
+    val locationData: LiveData<Resource<LocationEntity>> get()= _locationData
     private var compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     fun getWeatherData(context: Context, lat: Double, lon: Double) =
@@ -93,7 +94,7 @@ class WeatherViewModel @Inject constructor(private val getWeatherDataUseCase: Ge
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
             .subscribe {
-                locationData.postValue(Resource.Success(it))
+                _locationData.postValue(Resource.Success(it))
                 Log.e("TagDAtalo", it.lat.toString())
 
             })

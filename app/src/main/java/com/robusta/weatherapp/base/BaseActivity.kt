@@ -23,6 +23,8 @@ abstract class BaseActivity : AppCompatActivity(){
    lateinit var locationRequest: LocationRequest
      var imagePath = ""
     override fun onCreate(savedInstanceState: Bundle?) {
+        checkLocationPermission()
+
         super.onCreate(savedInstanceState)
         enableLocationSettings()
 
@@ -64,14 +66,12 @@ abstract class BaseActivity : AppCompatActivity(){
             .addOnSuccessListener(
                 this
             ) { response: LocationSettingsResponse? ->
-                checkLocationPermission()
                 Log.e("TagOnnn","ok")
             }
             .addOnFailureListener(
                 this
             ) { ex: Exception? ->
                 Log.e("TagOnnn","off")
-                checkLocationPermission()
                 if (ex is ResolvableApiException) {
                     // Location settings are NOT satisfied,  but this can be fixed  by showing the user a dialog.
                     try {
