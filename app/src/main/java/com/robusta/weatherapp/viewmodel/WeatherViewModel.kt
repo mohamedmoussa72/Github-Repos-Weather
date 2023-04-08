@@ -16,7 +16,10 @@ import kotlinx.coroutines.launch
 import java.lang.Exception
 import androidx.lifecycle.*
 import com.robusta.data.model.location.LocationEntity
+import com.robusta.data.model.location.WeatherData
 import com.robusta.domain.usecase.GetLocationUseCase
+import com.robusta.domain.usecase.GetSavedWeatherUseCase
+import com.robusta.domain.usecase.SaveWeatherUseCase
 import com.robusta.weatherapp.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -24,32 +27,41 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
 @HiltViewModel
-class WeatherViewModel @Inject constructor(private val getWeatherDataUseCase: GetWeatherDataUseCase, private val getLocationUseCase: GetLocationUseCase):ViewModel() {
-     val weatherData: MutableLiveData<Resource<WeatherResponse>> = MutableLiveData()
+class WeatherViewModel @Inject constructor(private val getWeatherDataUseCase: GetWeatherDataUseCase,
+                                           private val getLocationUseCase: GetLocationUseCase
+                                           ,private val saveWeatherUseCase: SaveWeatherUseCase
+                                           ,private val getSavedWeatherUseCase: GetSavedWeatherUseCase):ViewModel() {
+    val weatherData: MutableLiveData<Resource<WeatherResponse>> = MutableLiveData()
+    val locationData: MutableLiveData<Resource<LocationEntity>> = MutableLiveData()
     private var compositeDisposable: CompositeDisposable = CompositeDisposable()
 
-    fun getWeatherData(context: Context,lat:Double , lon :Double) = viewModelScope.launch(Dispatchers.IO) {
+    fun getWeatherData(context: Context, lat: Double, lon: Double) =
+        viewModelScope.launch(Dispatchers.IO) {
             weatherData.postValue(Resource.Loading())
-        try{
-            if(isNetworkAvailable(context)) {
+            try {
+                if (isNetworkAvailable(context)) {
+                    Log.e("Tagdddd", lat.toString())
+                    val apiResult = getWeatherDataUseCase.execute(lat, lon)
+                    Log.e("TagddddAta", apiResult.data?.name.toString())
 
-                val apiResult = getWeatherDataUseCase.execute(lat, lon)
-                Log.e("Tagffffff", apiResult.data?.name.toString())
-                weatherData.postValue(apiResult)
-            }else{
-                weatherData.postValue(Resource.Error(context.getString(R.string.internet_error_msg)))
+                    weatherData.postValue(apiResult)
+                } else {
+                    weatherData.postValue(Resource.Error(context.getString(R.string.internet_error_msg)))
+                }
+
+            } catch (e: Exception) {
+                weatherData.postValue(Resource.Error(e.message.toString()))
             }
 
-        }catch (e: Exception){
-            weatherData.postValue(Resource.Error(e.message.toString()))
         }
 
-    }
-    private fun isNetworkAvailable(context: Context?):Boolean{
+    private fun isNetworkAvailable(context: Context?): Boolean {
         if (context == null) return false
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            val capabilities =
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
             if (capabilities != null) {
                 when {
                     capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
@@ -81,12 +93,20 @@ class WeatherViewModel @Inject constructor(private val getWeatherDataUseCase: Ge
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
             .subscribe {
+                locationData.postValue(Resource.Success(it))
                 Log.e("TagDAtalo", it.lat.toString())
 
             })
     }
 
 
+    suspend  fun saveArticle(weatherData: WeatherData) = viewModelScope.launch {
+        saveWeatherUseCase.execute(weatherData)
+    }
 
-
+     fun getSavedNews() = liveData {
+        getSavedWeatherUseCase.execute().collect {
+            emit(it)
+        }
+    }
 }

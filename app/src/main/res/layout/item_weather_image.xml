@@ -15,11 +15,12 @@
             android:layout_height="match_parent">
 
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <com.robusta.weatherapp.utile.RoundRectCornerImageView
                 android:id="@+id/iv_item_weather_image"
                 android:layout_width="match_parent"
                 android:layout_height="280dp"
                 android:src="@color/teal_700"
+                android:scaleType="fitXY"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

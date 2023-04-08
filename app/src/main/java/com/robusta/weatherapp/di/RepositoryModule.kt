@@ -2,6 +2,7 @@ package com.robusta.weatherapp.di
 
 import com.robusta.data.repo.WeatherRepository
 import com.robusta.data.repo.WeatherRepositoryImpl
+import com.robusta.data.repo.dataSource.WeatherLocaleDataSource
 import com.robusta.data.repo.dataSource.WeatherRemoteDataSource
 import dagger.Module
 import dagger.Provides
@@ -15,9 +16,10 @@ object RepositoryModule {
 
     @Provides
     fun provideWeatherRepository(
-        weatherRemoteDataSource: WeatherRemoteDataSource
+        weatherRemoteDataSource: WeatherRemoteDataSource,
+        weatherLocaleDataSource: WeatherLocaleDataSource
     ): WeatherRepository {
-        return WeatherRepositoryImpl(weatherRemoteDataSource)
+        return WeatherRepositoryImpl(weatherRemoteDataSource,weatherLocaleDataSource)
     }
 
 }

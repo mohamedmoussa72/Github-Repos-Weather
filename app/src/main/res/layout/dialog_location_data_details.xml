@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/white_rectangle_right_top_rounded_24dp">
+
+        <View
+            android:id="@+id/v_top"
+            android:layout_width="50dp"
+            android:layout_height="5dp"
+            android:layout_marginTop="@dimen/dp_16"
+            android:background="@drawable/gray_rectangle_solid_all_rounded_2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_image_data"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dp_12"
+            android:layout_marginTop="@dimen/dp_16"
+            app:cardCornerRadius="@dimen/dp_8"
+            app:layout_constraintTop_toBottomOf="@id/v_top">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_dialog_location_data_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_dialog_location_data_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="280dp"
+                    android:scaleType="fitXY"
+                    android:src="@color/teal_700"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/iv_dialog_location_data_image">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_dialog_location_data_city_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_8"
+                        android:fontFamily="@font/tajawal_bold"
+                        android:gravity="center"
+                        android:shadowColor="@color/black"
+                        android:shadowRadius="3"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/large_text_16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="El-Mansoura" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_dialog_location_data_degree_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tv_dialog_location_data_degree"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/tajawal_bold"
+                            android:gravity="center"
+                            android:scaleY="1.5"
+                            android:shadowColor="@color/black"
+                            android:shadowRadius="3"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/xlarge_text_24sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="300.16" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tv_dialog_location_data_degree_status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dp_8"
+                            android:fontFamily="@font/tajawal_regular"
+                            android:gravity="center"
+                            android:scaleY="1.5"
+                            android:shadowColor="@color/black"
+                            android:shadowRadius="3"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/small_text_12sp"
+                            app:layout_constraintBottom_toBottomOf="@id/tv_dialog_location_data_degree"
+                            app:layout_constraintStart_toEndOf="@id/tv_dialog_location_data_degree"
+                            tools:text="Clear" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_dialog_location_data_degree_data"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginVertical="@dimen/dp_12"
+                        android:layout_marginStart="@dimen/dp_8"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/cl_dialog_location_data_degree_status">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/cl_dialog_location_data_min_degree"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tv_dialog_location_data_min_degree_label"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/dp_8"
+                                android:fontFamily="@font/tajawal_regular"
+                                android:gravity="center"
+                                android:shadowColor="@color/black"
+                                android:shadowRadius="3"
+                                android:text="@string/min_temperature"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/small_text_12sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tv_dialog_location_data_min_degree"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/dp_8"
+                                android:fontFamily="@font/tajawal_medium"
+                                android:gravity="center"
+                                android:shadowColor="@color/black"
+                                android:shadowRadius="3"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/small_text_12sp"
+                                app:layout_constraintBottom_toBottomOf="@id/tv_dialog_location_data_min_degree_label"
+                                app:layout_constraintStart_toEndOf="@id/tv_dialog_location_data_min_degree_label"
+                                app:layout_constraintTop_toTopOf="@id/tv_dialog_location_data_min_degree_label"
+                                tools:text="300" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/cl_dialog_location_data_max_degree"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/cl_dialog_location_data_min_degree">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tv_dialog_location_data_max_degree_label"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/dp_8"
+                                android:fontFamily="@font/tajawal_regular"
+                                android:gravity="center"
+                                android:shadowColor="@color/black"
+                                android:shadowRadius="3"
+                                android:text="@string/max_temperature"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/small_text_12sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tv_dialog_location_data_max_degree"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/dp_8"
+                                android:fontFamily="@font/tajawal_medium"
+                                android:gravity="center"
+                                android:shadowColor="@color/black"
+                                android:shadowRadius="3"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/small_text_12sp"
+                                app:layout_constraintBottom_toBottomOf="@id/tv_dialog_location_data_max_degree_label"
+                                app:layout_constraintStart_toEndOf="@id/tv_dialog_location_data_max_degree_label"
+                                app:layout_constraintTop_toTopOf="@id/tv_dialog_location_data_max_degree_label"
+                                tools:text="300" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/cl_dialog_location_data_wind_speed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/cl_dialog_location_data_max_degree">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tv_dialog_location_data_wind_speed_label"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/dp_8"
+                                android:fontFamily="@font/tajawal_regular"
+                                android:gravity="center"
+                                android:shadowColor="@color/black"
+                                android:shadowRadius="3"
+                                android:text="@string/wind_speed"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/small_text_12sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tv_dialog_location_data_wind_speed"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/dp_8"
+                                android:fontFamily="@font/tajawal_medium"
+                                android:gravity="center"
+                                android:shadowColor="@color/black"
+                                android:shadowRadius="3"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/small_text_12sp"
+                                app:layout_constraintBottom_toBottomOf="@id/tv_dialog_location_data_wind_speed_label"
+                                app:layout_constraintStart_toEndOf="@id/tv_dialog_location_data_wind_speed_label"
+                                app:layout_constraintTop_toTopOf="@id/tv_dialog_location_data_wind_speed_label"
+                                tools:text="6.1" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <ProgressBar
+                    android:id="@+id/pb_dialog_location_data_progressr"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_dialog_location_data_share"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginVertical="@dimen/margin_24dp"
+            android:layout_marginBottom="@dimen/margin_24dp"
+            android:background="@drawable/orange_rectangle_rounded_16dp"
+            android:fontFamily="@font/tajawal_medium"
+            android:gravity="center"
+            android:text="@string/share"
+            android:textColor="@color/black"
+            android:textSize="@dimen/large_text_18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cv_image_data"
+            app:layout_constraintWidth_percent=".8" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

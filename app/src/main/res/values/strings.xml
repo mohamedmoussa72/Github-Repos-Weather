@@ -5,5 +5,6 @@
     <string name="min_temperature">Min Temperature:</string>
     <string name="max_temperature">Max Temperature:</string>
     <string name="wind_speed">Wind Speed:</string>
+    <string name="share">Share</string>
     <string name="internet_error_msg">Internet is not available</string>
 </resources>
