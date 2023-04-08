@@ -41,15 +41,14 @@ abstract class BaseActivity : AppCompatActivity(){
                             Manifest.permission.ACCESS_FINE_LOCATION,
                             Manifest.permission.ACCESS_BACKGROUND_LOCATION
                         ),
-                        Companion.MY_PERMISSIONS_REQUEST_LOCATION
+                        MY_PERMISSIONS_REQUEST_LOCATION
                     )
                 }
             } else {
                 this.let {
                     ActivityCompat.requestPermissions(
                         it,
-                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                        Companion.MY_PERMISSIONS_REQUEST_LOCATION
+                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), MY_PERMISSIONS_REQUEST_LOCATION
                     )
                 }
             }
@@ -66,13 +65,14 @@ abstract class BaseActivity : AppCompatActivity(){
             .checkLocationSettings(builder.build())
             .addOnSuccessListener(
                 this
-            ) { response: LocationSettingsResponse? ->
-                Log.e("TagOnnn","ok")
+            ) {
+                Log.d(TAG, "enableLocationSettings: on")
             }
             .addOnFailureListener(
                 this
             ) { ex: Exception? ->
-                Log.e("TagOnnn","off")
+                Log.d(TAG, "enableLocationSettings: off")
+
                 if (ex is ResolvableApiException) {
                     // Location settings are NOT satisfied,  but this can be fixed  by showing the user a dialog.
                     try {
@@ -98,11 +98,7 @@ abstract class BaseActivity : AppCompatActivity(){
     val launcher = registerImagePicker { result: List<Image> ->
 
         result.forEach { image ->
-            Log.e("TagPath", image.path.toString() + " imagepa") // create new file of compressed path
-
             imagePath = image.path // get the file path
-
-
         }
     }
 
@@ -110,6 +106,7 @@ abstract class BaseActivity : AppCompatActivity(){
         const val MY_PERMISSIONS_REQUEST_LOCATION = 99
         const val LOCATION_REQUEST_FASTEST_INTERVAL = 5000L
         val REQUEST_CODE_CHECK_SETTINGS = 12300
+        private const val TAG = "BaseActivity"
 
     }
 }

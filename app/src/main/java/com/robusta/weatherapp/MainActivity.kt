@@ -26,7 +26,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
 
 
@@ -34,7 +33,6 @@ import javax.inject.Inject
 class MainActivity : BaseActivity() {
     private lateinit var bitmap :Bitmap
     private lateinit var imageUri: Uri
-    private var weatherResponse: WeatherResponse? = null
     private val weatherViewModel: WeatherViewModel by viewModels()
     private val locationViewModel: LocationViewModel by viewModels()
     private val bottomLocationDataDialog by lazy  {
@@ -117,7 +115,6 @@ class MainActivity : BaseActivity() {
         bindingSheet.apply {
             tvDialogLocationDataShare.setOnClickListener {
 
-                Log.e("TagUriOn", CompressionUtil().getImageUri(this@MainActivity, bitmap).toString().toString())
 
                 val intent = Intent(Intent.ACTION_SEND)
                 intent.type = "image/*"
@@ -126,7 +123,7 @@ class MainActivity : BaseActivity() {
             }
         }
 
-        bottomLocationDataDialog?.show()
+        bottomLocationDataDialog.show()
     }
 
     private fun setLocationData(result: Resource<WeatherResponse>) {
@@ -144,15 +141,16 @@ class MainActivity : BaseActivity() {
 
             }
             CoroutineScope(Dispatchers.IO).launch {
-                delay(1000)
+                delay(500)
                 captureImage(result,clDialogLocationDataContainer)
 
         }
+
         }
     }
-       suspend fun captureImage(result: Resource<WeatherResponse> , view: View){
-           bitmap =CompressionUtil().getScreenShot(this@MainActivity, view)!!
-           imageUri = CompressionUtil().getImageUri(this@MainActivity, bitmap)!!
+       private fun captureImage(result: Resource<WeatherResponse>, view: View){
+           bitmap =CompressionUtil().captureView( view)
+           imageUri = CompressionUtil().getImageUri(this@MainActivity, bitmap)
            saveData(result,imageUri.toString())
        }
 

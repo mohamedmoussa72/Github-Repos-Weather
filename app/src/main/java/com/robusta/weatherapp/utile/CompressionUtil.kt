@@ -17,7 +17,7 @@ import java.io.*
 
 class CompressionUtil {
 
-    fun getScreenShot(context: Context,view: View): Bitmap {
+    fun captureView(view: View): Bitmap {
         val screenView = view
         screenView.isDrawingCacheEnabled = true
         val bitmap = Bitmap.createBitmap(screenView.drawingCache)
@@ -25,14 +25,14 @@ class CompressionUtil {
         return bitmap
     }
 
-    fun getImageUri(inContext: Context, inImage: Bitmap): Uri {
+    fun getImageUri(context: Context, inImage: Bitmap): Uri {
         val bytes = ByteArrayOutputStream()
         inImage.compress(Bitmap.CompressFormat.PNG, 100, bytes)
         val path =
             MediaStore.Images.Media.insertImage(
-                inContext.contentResolver,
+                context.contentResolver,
                 inImage,
-                "weather Photo",
+                "/" + System.currentTimeMillis() + ".jpg",
                 null
             )
         return Uri.parse(path)
