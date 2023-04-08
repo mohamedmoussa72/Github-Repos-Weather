@@ -18,10 +18,11 @@ import java.io.*
 class CompressionUtil {
 
     fun captureView(view: View): Bitmap {
-        val screenView = view
-        screenView.isDrawingCacheEnabled = true
-        val bitmap = Bitmap.createBitmap(screenView.drawingCache)
-        screenView.isDrawingCacheEnabled = false
+        val bitmap = Bitmap.createBitmap(
+            view.width, view.height, Bitmap.Config.ARGB_8888
+        )
+        val canvas = Canvas(bitmap)
+        view.draw(canvas)
         return bitmap
     }
 

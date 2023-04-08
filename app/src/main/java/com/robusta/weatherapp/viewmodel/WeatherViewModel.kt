@@ -37,10 +37,7 @@ class WeatherViewModel @Inject constructor(private val getWeatherDataUseCase: Ge
             weatherData.postValue(Resource.Loading())
             try {
                 if (isNetworkAvailable(context)) {
-                    Log.e("Tagdddd", lat.toString())
                     val apiResult = getWeatherDataUseCase.execute(lat, lon)
-                    Log.e("TagddddAta", apiResult?.data?.name.toString())
-
                     weatherData.postValue(apiResult!!)
                 } else {
                     weatherData.postValue(Resource.Error(context.getString(R.string.internet_error_msg)))

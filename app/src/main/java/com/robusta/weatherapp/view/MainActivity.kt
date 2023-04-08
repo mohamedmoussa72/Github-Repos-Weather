@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,19 +32,21 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
-    private lateinit var bitmap :Bitmap
+    private var bitmap: Bitmap? = null
     private lateinit var imageUri: Uri
     private val weatherViewModel: WeatherViewModel by viewModels()
     private val locationViewModel: LocationViewModel by viewModels()
-    private val bottomLocationDataDialog by lazy  {
-        BottomSheetDialog( this)
+    private val bottomLocationDataDialog by lazy {
+        BottomSheetDialog(this)
     }
+
     @Inject
     lateinit var adapter: WeatherAdapter
     private lateinit var binding: ActivityMainBinding
     private lateinit var bindingSheet: DialogLocationDataDetailsBinding
     private var lat: Double = 0.0
     private var lon: Double = 0.0
+    private var isNetworkEnable = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +59,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initGUI() {
+        weatherViewModel.getSavedWeather()
         binding.apply {
             rvWeatherLocation.adapter = adapter
             rvWeatherLocation.layoutManager = LinearLayoutManager(this@MainActivity)
@@ -63,16 +67,33 @@ class MainActivity : BaseActivity() {
         locationViewModel.locationData.observe(this) {
             lat = it.data?.lat!!
             lon = it.data?.lon!!
-            Log.e("TagDAtalo", lat.toString())
         }
 
         weatherViewModel.getSavedWeather().observe(this) { result ->
-            adapter.add(result)
+            if (result.isNotEmpty()) {
+                binding.ivActivityMainPlaceHolder.visibility = View.GONE
+                adapter.add(result)
+            } else {
+                binding.ivActivityMainPlaceHolder.visibility = View.VISIBLE
+            }
+
         }
 
         weatherViewModel.weatherData.observe(this) { result ->
-            if (result.data != null ) {
-                setLocationData(result)
+            when (result) {
+                is Resource.Loading -> {
+
+                }
+                is Resource.Success -> {
+                    if (result.data != null) {
+                        setLocationData(result)
+                    }
+
+                }
+                is Resource.Error -> {
+                    Toast.makeText(this, result.message, Toast.LENGTH_SHORT).show()
+                }
+
             }
 
         }
@@ -83,7 +104,10 @@ class MainActivity : BaseActivity() {
     private fun eventGUI() {
         binding.apply {
             clActivityMainAddWeather.setOnClickListener {
-                startImagePicker(1)
+                if (lat != 0.0 && lon != 0.0)
+                    startImagePicker(1)
+                else
+                    Toast.makeText(this@MainActivity,"Application need access location",Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -92,13 +116,12 @@ class MainActivity : BaseActivity() {
         super.onResume()
         locationViewModel.getLocation()
         launcher.runCatching {
-            Log.e("TagImage",imagePath)
-            if(imagePath !="") {
-                Log.e("TagImageopen",imagePath)
+            if (imagePath != "") {
                 weatherViewModel.getWeatherData(this@MainActivity, lat, lon)
                 showBottomLocationDataDialog()
             }
-        }    }
+        }
+    }
 
     private fun showBottomLocationDataDialog() {
 
@@ -115,11 +138,15 @@ class MainActivity : BaseActivity() {
         bindingSheet.apply {
             tvDialogLocationDataShare.setOnClickListener {
 
-
-                val intent = Intent(Intent.ACTION_SEND)
-                intent.type = "image/*"
-                intent.putExtra(Intent.EXTRA_STREAM, CompressionUtil().getImageUri(this@MainActivity, bitmap))
-                startActivity(intent)
+                if (bitmap != null) {
+                    val intent = Intent(Intent.ACTION_SEND)
+                    intent.type = "image/*"
+                    intent.putExtra(
+                        Intent.EXTRA_STREAM,
+                        CompressionUtil().getImageUri(this@MainActivity, bitmap!!)
+                    )
+                    startActivity(intent)
+                }
             }
         }
 
@@ -135,31 +162,28 @@ class MainActivity : BaseActivity() {
             tvDialogLocationDataMinDegree.text = result.data?.main?.temp_min.toString()
             tvDialogLocationDataMaxDegree.text = result.data?.main?.temp_max.toString()
             tvDialogLocationDataWindSpeed.text = result.data?.wind?.speed.toString()
-            result.data?.weather.let {
-                tvDialogLocationDataDegreeStatus.text =
-                    result.data?.weather?.get(0)?.main.toString()
-
-            }
+            tvDialogLocationDataDegreeStatus.text = result.data?.weather?.get(0)?.main.toString()
+            
             CoroutineScope(Dispatchers.IO).launch {
                 delay(500)
-                captureImage(result,clDialogLocationDataContainer)
+                captureImage(result, clDialogLocationDataContainer)
 
-        }
+            }
 
         }
     }
-       private fun captureImage(result: Resource<WeatherResponse>, view: View){
-           bitmap =CompressionUtil().captureView( view)
-           imageUri = CompressionUtil().getImageUri(this@MainActivity, bitmap)
-           saveData(result,imageUri.toString())
-       }
+
+    private fun captureImage(result: Resource<WeatherResponse>, view: View) {
+        bitmap = CompressionUtil().captureView(view)
+        imageUri = CompressionUtil().getImageUri(this@MainActivity, bitmap!!)
+        saveData(result, imageUri.toString())
+    }
 
     private fun saveData(result: Resource<WeatherResponse>, image: String) {
         CoroutineScope(Dispatchers.IO).launch {
             result.data?.apply {
                 weatherViewModel.saveWeather(
                     WeatherData(
-
                         name.toString(),
                         main?.temp.toString(),
                         weather?.get(0)?.main.toString(),
@@ -167,7 +191,6 @@ class MainActivity : BaseActivity() {
                         main?.temp_max.toString(),
                         wind?.speed.toString(),
                         image
-
                     )
                 )
 
@@ -180,7 +203,7 @@ class MainActivity : BaseActivity() {
     override fun onPause() {
         super.onPause()
         bottomLocationDataDialog.dismiss()
-        imagePath=""
+        imagePath = ""
 
     }
 }
