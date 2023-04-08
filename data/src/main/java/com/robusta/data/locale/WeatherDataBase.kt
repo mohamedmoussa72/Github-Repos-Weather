@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.robusta.data.model.location.WeatherData
 
 @Database(entities = [WeatherData::class],
-    version = 1, exportSchema = false)
+    version = 2, exportSchema = false)
 abstract class WeatherDataBase : RoomDatabase() {
 
     abstract fun getWeatherDao(): WeatherDao

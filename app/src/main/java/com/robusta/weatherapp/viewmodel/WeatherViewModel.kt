@@ -28,13 +28,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WeatherViewModel @Inject constructor(private val getWeatherDataUseCase: GetWeatherDataUseCase,
-                                           private val getLocationUseCase: GetLocationUseCase
-                                           ,private val saveWeatherUseCase: SaveWeatherUseCase
-                                           ,private val getSavedWeatherUseCase: GetSavedWeatherUseCase):ViewModel() {
+                                           private val saveWeatherUseCase: SaveWeatherUseCase,
+                                           private val getSavedWeatherUseCase: GetSavedWeatherUseCase):ViewModel() {
     val weatherData: MutableLiveData<Resource<WeatherResponse>> = MutableLiveData()
-   private val _locationData: MutableLiveData<Resource<LocationEntity>> = MutableLiveData()
-    val locationData: LiveData<Resource<LocationEntity>> get()= _locationData
-    private var compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     fun getWeatherData(context: Context, lat: Double, lon: Double) =
         viewModelScope.launch(Dispatchers.IO) {
@@ -43,9 +39,9 @@ class WeatherViewModel @Inject constructor(private val getWeatherDataUseCase: Ge
                 if (isNetworkAvailable(context)) {
                     Log.e("Tagdddd", lat.toString())
                     val apiResult = getWeatherDataUseCase.execute(lat, lon)
-                    Log.e("TagddddAta", apiResult.data?.name.toString())
+                    Log.e("TagddddAta", apiResult?.data?.name.toString())
 
-                    weatherData.postValue(apiResult)
+                    weatherData.postValue(apiResult!!)
                 } else {
                     weatherData.postValue(Resource.Error(context.getString(R.string.internet_error_msg)))
                 }
@@ -86,26 +82,11 @@ class WeatherViewModel @Inject constructor(private val getWeatherDataUseCase: Ge
 
     }
 
-    private val _locationModel = MutableLiveData<LocationEntity>()
-    val locationModel: LiveData<LocationEntity> = _locationModel
-
-    fun getLocation() {
-        compositeDisposable.add(getLocationUseCase.execute()
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
-            .subscribe {
-                _locationData.postValue(Resource.Success(it))
-                Log.e("TagDAtalo", it.lat.toString())
-
-            })
-    }
-
-
-    suspend  fun saveArticle(weatherData: WeatherData) = viewModelScope.launch {
+    suspend  fun saveWeather(weatherData: WeatherData) = viewModelScope.launch {
         saveWeatherUseCase.execute(weatherData)
     }
 
-     fun getSavedNews() = liveData {
+     fun getSavedWeather() = liveData {
         getSavedWeatherUseCase.execute().collect {
             emit(it)
         }

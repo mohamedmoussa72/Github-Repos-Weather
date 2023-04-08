@@ -7,7 +7,7 @@ import com.robusta.data.utile.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface WeatherRepository {
-    suspend fun getWeatherResponse(lat : Double, lon : Double): Resource<WeatherResponse>
+    suspend fun getWeatherResponse(lat : Double, lon : Double): Resource<WeatherResponse>?
     suspend fun saveWeather(weatherData: WeatherData)
     fun getSavedWeather(): Flow<List<WeatherData>>
 }

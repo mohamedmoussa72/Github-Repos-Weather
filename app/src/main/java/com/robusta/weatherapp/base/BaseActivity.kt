@@ -12,6 +12,7 @@ import com.esafirm.imagepicker.features.registerImagePicker
 import com.esafirm.imagepicker.model.Image
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
+import com.google.android.gms.location.LocationSettingsRequest
 import com.robusta.data.utile.hasLocationPermission
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
