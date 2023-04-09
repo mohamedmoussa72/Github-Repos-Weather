@@ -59,7 +59,6 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initGUI() {
-        weatherViewModel.getSavedWeather()
         binding.apply {
             rvWeatherLocation.adapter = adapter
             rvWeatherLocation.layoutManager = LinearLayoutManager(this@MainActivity)

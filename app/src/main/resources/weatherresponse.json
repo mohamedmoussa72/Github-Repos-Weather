@@ -1,0 +1,19 @@
+{
+
+  "weather": [
+    {
+      "main": "Clouds"
+    }
+  ],
+  "main": {
+    "temp": 291.83,
+    "temp_min": 291.83,
+    "temp_max": 291.83
+
+  },
+  "wind": {
+    "speed": 3.52
+  },
+  "id": 361213,
+  "name": "Al Ḩāmūl",
+  "cod": 200}
