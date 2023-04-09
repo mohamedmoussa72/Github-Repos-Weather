@@ -107,7 +107,11 @@ class MainActivity : BaseActivity() {
                 if (lat != 0.0 && lon != 0.0)
                     startImagePicker(1)
                 else
-                    Toast.makeText(this@MainActivity,"Application need access location",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@MainActivity,
+                        "Application need access location",
+                        Toast.LENGTH_SHORT
+                    ).show()
             }
         }
     }
